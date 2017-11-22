@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <!-- Style -->
+    <link rel="stylesheet" href="css/bootstrap.min.css"></link>
+    <link rel="stylesheet" href="css/style.css"></link>
+
+    <!-- Libraries -->
+    <script src="lib/jquery-3.2.1.min.js"></script>
+    <script src="lib/popper.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <script src="lib/BigInteger.min.js"></script>
+    <script src="lib/moment.js"></script>
+
+    <!-- Entities -->
+    <script src="logger.js"></script>
+    <script src="calc.js"></script>
+    <script src="stats.js"></script>
+    <script src="rsa.js"></script>
+
+    <!-- Main -->
+    <script src="cipher.js"></script>
+  </head>
+  <body>
+    <form class="form-inline">
+      <label for="p" class="m-1">p</label>
+      <input id="p" class="form-control m-1" type="text" autocomplete="off" autofocus></input>
+      <label for="q" class="m-1">q</label>
+      <input id="q" class="form-control m-1" type="text" autocomplete="off"></input>
+      <label for="e" class="m-1">e</label>
+      <input id="e" class="form-control m-1" type="text" autocomplete="off"></input>
+      <input id="file" class="form-control-file m-1" type="file"></input>
+      <div class="btn-group m-1" data-toggle="buttons">
+        <label class="btn btn-secondary active"><input type="radio" name="actionType" id="cipherAction" checked />Cipher</label>
+        <label class="btn btn-secondary"><input type="radio" name="actionType" id="decipherAction" />Decipher</label>
+      </div>
+      <button id="run" type="button" class="btn btn-primary m-1">Run!</button>
+    </form>
+    <div id="statsContainer" class="mb-2"></div>
+    <div id="mainContainer" class="mb-2"></div>
+  </body>
+</html>
