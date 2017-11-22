@@ -34,22 +34,24 @@
       return value;
     }
 
-    function getSmallLength(l) {
-      return Math.floor((l - 1) / 8) * 8;
+    function getSmallLength(m) {
+      var n = bigInt.one;
+      var l = -1;
+      while (m.greater(n)) {
+        n = n.shiftLeft(1);
+        ++l;
+      }
+      return Math.floor(l / 8) * 8;
     }
 
-    function getLargeLength(l) {
-      return Math.ceil(l / 8) * 8;
-    }
-
-    function getLengthHint(m) {
+    function getLargeLength(m) {
       var n = bigInt.one;
       var l = 0;
       while (n.lesser(m)) {
         n = n.shiftLeft(1);
         ++l;
       }
-      return l;
+      return Math.ceil(l / 8) * 8;
     }
 
     function readerOnError(evt) {
@@ -218,11 +220,9 @@
         throw "e and phi(m) are not coprime";
       }
 
-      var l = getLengthHint(m);
-      logger.logData("packet length hint", l);
-      var smallL = getSmallLength(l);
+      var smallL = getSmallLength(m);
       logger.logData("packet small length", smallL);
-      var largeL = getLargeLength(l);
+      var largeL = getLargeLength(m);
       logger.logData("packet large length", largeL);
 
       if (0 === smallL) {
