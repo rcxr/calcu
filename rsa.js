@@ -68,7 +68,6 @@
           break;
         default:
           logger.logError();
-          throw "unexpected";
       }
     }
 
@@ -236,7 +235,7 @@
         logger.logData("inverse(e, m)", e, calc.dataType.BIGINT);
         run(m, e, largeL, smallL, t);
       } else {
-        throw "unexpected";
+        throw "illegal cipher operation";
       }
     };
 
