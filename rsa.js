@@ -37,11 +37,11 @@
     function getSmallLength(m) {
       var n = bigInt.one;
       var l = -1;
-      while (m.greater(n)) {
+      while (m.greaterOrEquals(n)) {
         n = n.shiftLeft(1);
         ++l;
       }
-      return Math.floor(l / 8) * 8;
+      return Math.floor(l / 8);
     }
 
     function getLargeLength(m) {
@@ -51,7 +51,7 @@
         n = n.shiftLeft(1);
         ++l;
       }
-      return Math.ceil(l / 8) * 8;
+      return Math.ceil(l / 8);
     }
 
     function readerOnError(evt) {
@@ -105,13 +105,12 @@
     }
 
     function packetsToBytes(packets, length) {
-      var bytes = new Uint8Array(packets.length * length / 8);
-      var bytesPerPacket = length / 8;
+      var bytes = new Uint8Array(packets.length * length);
       var pIndex = -1;
 
       stats.bytesStart(bytes.length);
       for (var byte = 0; byte < bytes.length; ++byte) {
-        if (0 === byte % bytesPerPacket) {
+        if (0 === byte % length) {
           ++pIndex;
           stats.bytesUpdate(byte);
         }
@@ -124,15 +123,14 @@
 
     function bytesToPackets(bytes, length) {
       var packets = [];
-      var bytesPerPacket = length / 8;
 
       stats.packetsStart(bytes.length);
       for (var byte = 0; byte < bytes.length; ++byte) {
-        if (0 === byte % bytesPerPacket) {
+        if (0 === byte % length) {
           packets.push(bigInt.zero);
           stats.packetsUpdate(byte);
         }
-        packets[packets.length - 1] = bigInt(bytes[byte]).shiftLeft(byte % bytesPerPacket * 8).add(packets[packets.length - 1]);
+        packets[packets.length - 1] = bigInt(bytes[byte]).shiftLeft(byte % length * 8).add(packets[packets.length - 1]);
       }
       stats.packetsEnd();
       return packets;
