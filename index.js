@@ -6,8 +6,8 @@ $(function() {
     $("#results").empty();
   });
 
-  $("#expression").keypress(function(e) {
-    if (13 === e.which) {
+  $("#expression").keypress(function(evt) {
+    if (13 === evt.which) {
       var expression = $("#expression").val();
       var evalCard = new calc.evalCard(expression, ++count);
       $("#results").prepend(evalCard.getRoot());

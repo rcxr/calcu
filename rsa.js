@@ -4,7 +4,6 @@
     DECIPHER: 1,
     NO_OP: 2
   });
-  var BIT_MASK = bigInt(255);
 
   calc.rsa = function(stats) {
     var logger = new calc.prettyLogger();
@@ -95,45 +94,53 @@
     function readerOnLoadEnd(evt) { reader = null; }
 
     function cipherPackets(packets, e, m) {
-      stats.cipherStart(packets.length);
-      for (var i in packets) {
-        packets[i] = calc.modexp(packets[i], e, m);
-        stats.cipherUpdate(i);
-      }
-      stats.cipherEnd();
-      return packets;
+      return new Promise(resolve => {
+        var worker = new Worker("./cipherPacketsWorker.js");
+        worker.onmessage = function(evt) {
+          if (evt.data[0]) {
+            stats.cipherEnd();
+            var packets = util.stringsToBigInts(evt.data[1]);
+            resolve(packets);
+          } else {
+            stats.cipherUpdate(evt.data[1]);
+          }
+        };
+        stats.cipherStart(packets.length);
+        worker.postMessage([util.bigIntsToStrings(packets), e.toString(), m.toString()]);
+      });
     }
 
     function packetsToBytes(packets, length) {
-      var bytes = new Uint8Array(packets.length * length);
-      var pIndex = -1;
-
-      stats.bytesStart(bytes.length);
-      for (var byte = 0; byte < bytes.length; ++byte) {
-        if (0 === byte % length) {
-          ++pIndex;
-          stats.bytesUpdate(byte);
-        }
-        bytes[byte] = packets[pIndex].and(BIT_MASK);
-        packets[pIndex] = packets[pIndex].shiftRight(8);
-      }
-      stats.bytesEnd();
-      return bytes;
+      return new Promise(resolve => {
+        var worker = new Worker("./packetsToBytesWorker.js");
+        worker.onmessage = function(evt) {
+          if (evt.data[0]) {
+            stats.bytesEnd();
+            resolve(evt.data[1]);
+          } else {
+            stats.bytesUpdate(evt.data[1]);
+          }
+        };
+        stats.bytesStart(packets.length * length);
+        worker.postMessage([util.bigIntsToStrings(packets), length]);
+      });
     }
 
     function bytesToPackets(bytes, length) {
-      var packets = [];
-
-      stats.packetsStart(bytes.length);
-      for (var byte = 0; byte < bytes.length; ++byte) {
-        if (0 === byte % length) {
-          packets.push(bigInt.zero);
-          stats.packetsUpdate(byte);
-        }
-        packets[packets.length - 1] = bigInt(bytes[byte]).shiftLeft(byte % length * 8).add(packets[packets.length - 1]);
-      }
-      stats.packetsEnd();
-      return packets;
+      return new Promise(resolve => {
+        var worker = new Worker("./bytesToPacketsWorker.js");
+        worker.onmessage = function(evt) {
+          if (evt.data[0]) {
+            stats.packetsEnd();
+            var packets = util.stringsToBigInts(evt.data[1]);
+            resolve(packets);
+          } else {
+            stats.packetsUpdate(evt.data[1]);
+          }
+        };
+        stats.packetsStart(bytes.length);
+        worker.postMessage([bytes, length]);
+      });
     }
 
     function trimBytes(bytes) {
@@ -169,13 +176,13 @@
       };
     }());
 
-    function run(m, e, lRead, lWrite, t) {
+    async function run(m, e, lRead, lWrite, t) {
       logger.logData("bytes", inputBytes, calc.dataType.PRIMITIVES);
-      var packets = bytesToPackets(inputBytes, lRead);
+      var packets = await bytesToPackets(inputBytes, lRead);
       logger.logData("packets", packets, calc.dataType.BIGINTS);
-      packets = cipherPackets(packets, e, m);
+      packets = await cipherPackets(packets, e, m);
       logger.logData("ciphered packets", packets, calc.dataType.BIGINTS);
-      outputBytes = packetsToBytes(packets, lWrite);
+      outputBytes = await packetsToBytes(packets, lWrite);
       logger.logData("ciphered bytes", outputBytes, calc.dataType.PRIMITIVES);
       if (calc.actionType.DECIPHER === t) {
         downloadBytes([trimBytes(outputBytes)], inputFile);

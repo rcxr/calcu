@@ -1,12 +1,4 @@
 (function(calc, $, undefined) {
-  function bigIntArray(ints) {
-    var bigInts = [];
-    ints.forEach(function(x) {
-      bigInts.push(bigInt(x));
-    });
-    return bigInts;
-  }
-
   function strongComparer(actual, expected) {
     return actual === expected;
   }
@@ -122,7 +114,7 @@
   };
 
   calc.bigIntsValidator = function(expected) {
-    return new calc.validator(bigIntArray(expected), arrayComparer, new bigIntArrayFormatter());
+    return new calc.validator(util.stringsToBigInts(expected), arrayComparer, new bigIntArrayFormatter());
   };
 
   calc.euclideanValidator = function(expected, a, b) {
@@ -134,7 +126,7 @@
   };
 
   calc.chineseRemainderValidator = function(expected, as, ms) {
-    return new calc.validator(bigInt(expected), arrayComparer, new chineseRemainderFormatter(bigIntArray(as), bigIntArray(ms)));
+    return new calc.validator(bigInt(expected), arrayComparer, new chineseRemainderFormatter(util.stringsToBigInts(as), util.stringsToBigInts(ms)));
   };
 
   calc.primesValidator = function(expected, a) {

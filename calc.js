@@ -1,4 +1,4 @@
-(function(calc, $, undefined) {
+(function(calc, undefined) {
   // This file uses only bigInt numbers
   // Find out more at: https://www.npmjs.com/package/big-integer
   calc.RSA_DEFAULT_LENGTH = 12;
@@ -628,12 +628,10 @@
 
     return String.fromCharCode.apply(null, plain);
   };
-
   // TODO: pollard rho
   // TODO: rabin miller
   // TODO: lehmer check
   // TODO: trialdivision
   // TODO: elgamo
   // TODO: quadratic and lagrange
-
-}(window.calc = window.calc || {}, jQuery));
+}(window.calc = window.calc || {}));

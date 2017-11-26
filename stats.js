@@ -16,7 +16,8 @@
   }
 
   function speedFormatter(delta, p, unit) {
-    return Math.round(1000 * p / delta) + " " + unit + "/s";
+    var speed = 0 === delta ? 0 : Math.round(1000 * p / delta);
+    return speed + " " + unit + "/s";
   }
 
   function statCard(id, unit, action) {
