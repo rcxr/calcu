@@ -15,11 +15,8 @@ function postCompleted(result) {
 function packetsToBytes(packets, length) {
   var bytes = new Uint8Array(packets.length * length);
   var pIndex = -1;
-  var last = new Date().getMilliseconds();
   for (var byte = 0; byte < bytes.length; ++byte) {
-    var now = new Date().getMilliseconds();
-    if (last + 500 < now) {
-      last = now;
+    if (0 === byte % 20000) {
       postUpdate(byte);
     }
     if (0 === byte % length) {

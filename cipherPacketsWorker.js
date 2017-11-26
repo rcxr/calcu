@@ -11,12 +11,9 @@ function postCompleted(result) {
   postMessage([true, window.util.bigIntsToStrings(result)])
 }
 
-function bytesToPackets(packets, e, m) {
-  var last = new Date().getMilliseconds();
-  for (var i in packets) {
-    var now = new Date().getMilliseconds();
-    if (last + 500 < now) {
-      last = now;
+function cipherPackets(packets, e, m) {
+  for (var i = 0; i < packets.length; ++i) {
+    if (0 === i % 2000) {
       postUpdate(i);
     }
     packets[i] = window.calc.modexp(packets[i], e, m);
@@ -25,5 +22,5 @@ function bytesToPackets(packets, e, m) {
 }
 
 onmessage = function(evt) {
-  bytesToPackets(window.util.stringsToBigInts(evt.data[0]), bigInt(evt.data[1]), bigInt(evt.data[2]));
+  cipherPackets(window.util.stringsToBigInts(evt.data[0]), bigInt(evt.data[1]), bigInt(evt.data[2]));
 };
