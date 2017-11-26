@@ -2,7 +2,6 @@
   <head>
     <!-- Style -->
     <link rel="stylesheet" href="css/bootstrap.min.css"></link>
-    <link rel="stylesheet" href="css/style.css"></link>
 
     <!-- Libraries -->
     <script src="lib/jquery-3.2.1.min.js"></script>
@@ -20,7 +19,28 @@
     <script src="index.js"></script>
   </head>
   <body>
-    <div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <a class="navbar-brand" href="#">
+        rcxr-calcu
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navButtons">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navButtons">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">eval</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="cipher.html">cipher</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="test.html">tests</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="m-3">
       <input id="expression" class="form-control" type="text" placeholder="expression&hellip;" autocomplete="off" autofocus></input>
       <button id="clearResults" type="button" class="btn btn-primary mt-3">clear cards</button>
       <div id="results"></div>
