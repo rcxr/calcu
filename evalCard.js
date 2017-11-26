@@ -12,7 +12,7 @@
           .attr("type", "button")
           .attr("data-toggle", "collapse")
           .attr("data-target", "#log" + id)
-          .addClass("btn btn-primary")
+          .addClass("btn")
           .text("show log")))
       .append($("<div></div>")
         .prop("id", "log" + id)

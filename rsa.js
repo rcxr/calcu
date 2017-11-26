@@ -17,8 +17,8 @@
       .append($("<div></div>")
         .addClass("card-body")
         .append($("<button></button>")
-          .addClass("btn btn-primary")
-          .text("Clear log")
+          .addClass("btn btn-warning")
+          .text("clear log")
           .click(function() {
             logger.clear();
           })))
