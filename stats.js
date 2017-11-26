@@ -37,9 +37,9 @@
         .addClass("card-body")
         .append(mainSummary)
         .append(timeSummary)
+        .append($("<div></div>").addClass("progress").append(progress))
         .append(unitSummary)
-        .append(speedSummary)
-        .append($("<div></div>").addClass("progress").append(progress)));
+        .append(speedSummary));
 
     this.getRoot = function() {
       return root;
@@ -108,11 +108,15 @@
       return root;
     };
 
-    this.clear = function() {
-      read.clear();
+    this.clearCipherStats = function() {
       packets.clear();
       cipher.clear();
       bytes.clear();
+    };
+
+    this.clear = function() {
+      read.clear();
+      this.clearCipherStats();
     };
 
     this.readStart = function(t) { read.start(t); };

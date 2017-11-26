@@ -177,6 +177,7 @@
     }());
 
     async function run(m, e, lRead, lWrite, t) {
+      stats.clearCipherStats();
       logger.logData("bytes", inputBytes, calc.dataType.PRIMITIVES);
       var packets = await bytesToPackets(inputBytes, lRead);
       logger.logData("packets", packets, calc.dataType.BIGINTS);
