@@ -45,7 +45,7 @@
     var tests = $("<div></div>").addClass("list-group list-group-flush");
 
     var root = $("<div></div>")
-      .addClass("card mb-3")
+      .addClass("card")
       .append($("<div></div>")
         .addClass("card-body")
         .append($("<h1></h1>").addClass("card-title").text(label)))
