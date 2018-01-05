@@ -194,7 +194,7 @@
     var primes = [];
     var elevatedPrimes = [];
     var currExp = [];
-    var maxExp = []
+    var maxExp = [];
     var decomposition = calc.decompose(a);
     for (var p in decomposition) {
       primes.push(p);
@@ -333,10 +333,7 @@
     }
 
     if (!a.isUnit()) {
-      if (!(a in primes)) {
-        primes[a] = 0;
-      }
-      ++primes[a];
+      primes[a] = 1;
     }
 
     logger.logData("primes", primes, calc.dataType.PRIMES, "prime factors of " + aCopy.toString());
